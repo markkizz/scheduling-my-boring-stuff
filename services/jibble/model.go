@@ -91,3 +91,8 @@ type PersonIdRequest struct {
 type PersonAccessTokenRequest struct {
 	username, password, personId, refreshToken string
 }
+
+type ClockingRequest struct {
+	PersonID string
+	Type     string
+}

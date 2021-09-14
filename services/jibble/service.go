@@ -12,8 +12,9 @@ func Client(options struct{ token string }) *JibbleClient {
 	jibbleConfig := globalConfig.Config().Jibble
 	client := jibbleClient.NewJibbleClient(
 		JibbleClientOptions{
-			identityUrl: jibbleConfig.ApiIdentityUrl,
-			token:       options.token,
+			identityUrl:     jibbleConfig.ApiIdentityUrl,
+			timetrackingUrl: jibbleConfig.ApiTimeTrackingUrl,
+			token:           options.token,
 		},
 	)
 	return client
@@ -81,4 +82,20 @@ func (service *JibbleService) Login(username string, password string) {
 
 	service.accessToken = personAccessToken.AccessToken
 	service.refreshToken = personAccessToken.RefreshToken
+}
+
+func (service *JibbleService) Clock(clockType string) {
+
+	requestPayload := ClockingRequest{
+		PersonID: service.personId,
+		Type:     clockType, // In | Out
+	}
+
+	ctx := context.Background()
+	jibbleClient := Client(struct{ token string }{service.accessToken})
+	err := jibbleClient.Clocking(ctx, requestPayload)
+	if err != nil {
+		fmt.Printf("[Error ClockIn]: %v\n", err)
+		return
+	}
 }

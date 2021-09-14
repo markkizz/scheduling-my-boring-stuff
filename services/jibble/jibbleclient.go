@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/google/uuid"
 	services "github.com/markkizz/time-tracker-automation/services/httpclient"
 )
 
@@ -20,19 +21,22 @@ type JibbleHttpClient interface {
 }
 
 type JibbleClient struct {
-	identityUrl string
-	token       string
-	client      *services.HttpClient
+	identityUrl     string
+	timetrackingUrl string
+	token           string
+	client          *services.HttpClient
 }
 
 type JibbleClientOptions struct {
-	identityUrl string
-	token       string
+	identityUrl     string
+	timetrackingUrl string
+	token           string
 }
 
 func (jbc *JibbleClient) NewJibbleClient(options JibbleClientOptions) *JibbleClient {
 	return &JibbleClient{
 		options.identityUrl,
+		options.timetrackingUrl,
 		options.token,
 		&services.HttpClient{},
 	}
@@ -144,4 +148,30 @@ func (jbc *JibbleClient) GetPersonAccessToken(ctx context.Context, request Perso
 	}
 
 	return response, nil
+}
+
+func (jbc *JibbleClient) Clocking(ctx context.Context, request ClockingRequest) error {
+	uniqId := uuid.NewString()
+	payload := strings.NewReader(fmt.Sprintf(`{
+    "id": "%v",
+    "personId": "%v",
+    "type": "%v",
+    "clientType": "Web",
+    "platform": {}
+	}`, uniqId, request.PersonID, request.Type))
+
+	req, err := http.NewRequest(http.MethodPost, jbc.timetrackingUrl+"/v1/TimeEntries", payload)
+	// ! io will change request body
+	// io.Copy(os.Stdout, req.Body)
+	if err != nil {
+		return err
+	}
+
+	req = req.WithContext(ctx)
+
+	if err := jbc.request(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
