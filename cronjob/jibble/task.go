@@ -13,4 +13,5 @@ func Task() {
 	jibbleConfig := globalConfig.Config().Jibble
 	fmt.Println("------- Loging in -------")
 	jibbleService.Login(jibbleConfig.Username, jibbleConfig.Password)
+	jibbleService.Clock("In")
 }
