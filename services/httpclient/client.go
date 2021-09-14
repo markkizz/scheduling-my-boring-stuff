@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
+	// "io"
 	"net/http"
+	// "os"
 	"time"
 )
 
@@ -29,19 +32,24 @@ func (ht *HttpClient) SendRequest(req *http.Request, target interface{}) error {
 		return err
 	}
 	defer res.Body.Close()
+	// Print the body to the stdout
+	// io.Copy(os.Stdout, res.Body)
+
+	now := time.Now().Format(time.ANSIC)
 
 	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusBadRequest {
+		// io.Copy(os.Stdout, res.Body)
 		var errRes ErrorResponse
 		if err = json.NewDecoder(res.Body).Decode(&errRes); err == nil {
-			return errors.New(fmt.Sprintf("error statusCode: %d - %s", res.StatusCode, errRes.Message))
+			return errors.New(fmt.Sprintf("[error] %v %s %v - %v %v\n", req.Method, req.URL, now, res.Status, errRes.Message))
 		}
-		now := time.Now().Format(time.ANSIC)
-		return fmt.Errorf("error statusCode: %d - %s", res.StatusCode, now)
+		return fmt.Errorf("[error] %v %s %v - %v %v\n", req.Method, req.URL, now, res.Status, errRes.Message)
 	}
 
 	if err = json.NewDecoder(res.Body).Decode(&target); err != nil {
 		return err
 	}
+	fmt.Printf("[request] %v %s %v - %v\n", req.Method, req.URL, now, res.Status)
 
 	return nil
 }
