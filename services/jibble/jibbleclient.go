@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	services "github.com/markkizz/time-tracker-automation/services/httpclient"
+	services "github.com/markkizz/scheduling-my-boring-stuff/services/httpclient"
 )
 
 type JibbleHttpClient interface {

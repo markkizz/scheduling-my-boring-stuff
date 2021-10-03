@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	globalConfig "github.com/markkizz/time-tracker-automation/config"
+	globalConfig "github.com/markkizz/scheduling-my-boring-stuff/config"
 )
 
 func Client(options struct{ token string }) *JibbleClient {

@@ -4,7 +4,7 @@ import (
 	"log"
 
 	env "github.com/joho/godotenv"
-	"github.com/markkizz/time-tracker-automation/cronjob"
+	"github.com/markkizz/scheduling-my-boring-stuff/cronjob"
 )
 
 func main() {

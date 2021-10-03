@@ -1,7 +1,7 @@
 package cronjob
 
 import (
-	"github.com/markkizz/time-tracker-automation/cronjob/jibble"
+	"github.com/markkizz/scheduling-my-boring-stuff/cronjob/jibble"
 )
 
 func Run() {

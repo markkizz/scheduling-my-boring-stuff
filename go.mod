@@ -1,4 +1,4 @@
-module github.com/markkizz/time-tracker-automation
+module github.com/markkizz/scheduling-my-boring-stuff
 
 go 1.17
 

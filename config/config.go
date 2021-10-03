@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/markkizz/time-tracker-automation/config/jibble"
+	"github.com/markkizz/scheduling-my-boring-stuff/config/jibble"
 )
 
 type Configuration struct {
