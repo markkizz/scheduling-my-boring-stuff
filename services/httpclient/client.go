@@ -55,7 +55,7 @@ func (ht *HttpClient) SendRequest(req *http.Request, target interface{}) error {
 }
 
 func NewClient() *http.Client {
-	httpClient := HttpClient{}
+	httpClient := &HttpClient{}
 	client := httpClient.Create()
 	return client
 }
